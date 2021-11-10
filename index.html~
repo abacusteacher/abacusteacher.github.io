@@ -4,13 +4,13 @@
 <meta http-equiv="“Expires”" content="”-1?">
 <meta http-equiv="“CACHE-CONTROL”" content="”NO-CACHE”">
 <title>Math Junior Abacus Simulator</title>
-<script async="" src="/invisible.js"></script>
+<script async="" src="Math%20Junior%20Abacus%20Simulator_files/invisible.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script></head>
   
   <body onload="run();">
     <center><h1>Math Junior Abacus Simulator</h1><br><h2 id="number">0</h2><br>
     <div id="myAbacus"> </div>
-	<script src="/mjabacus.js"></script>
+	<script src="Math%20Junior%20Abacus%20Simulator_files/mjabacus.js"></script>
     <script type="text/javascript">
       function run() {
         var abacus = new Abacus("myAbacus", 0);
