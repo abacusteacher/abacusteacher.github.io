@@ -255,6 +255,7 @@ function Abacus(parentDivId, type) {
         ly += stepsY;
       }
     }
+    var placevalue = ["Ones", "Tens", "Hundreds", "Thousands", "Ten Thousands", "Hundred Thousands", "Millions", "Ten Millions", "Hundred Millions", "Billions", "Ten Billions", "Hundred Billions", "Trillions", "Ten Trillions", "Hundred Trillions", "Quadrillions"]
     // draw frame
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 5;
@@ -275,6 +276,18 @@ function Abacus(parentDivId, type) {
       ctx.lineTo(1360, y);
       ctx.stroke();
     }
+    var yy = 50 + (abacusCtrl.beadPerLine + 2) * abacusCtrl.beadHeight;
+    var font = ctx.font;
+    ctx.font = '12px Sserif';
+    for (var i = 0; i < abacusCtrl.beadLines; i++) {
+      var x = -60 + (abacusCtrl.beadLines+1) * abacusCtrl.beadSpacing - i * abacusCtrl.beadSpacing;
+      ctx.beginPath();
+      if (i % 2 == 1)
+          ctx.fillText(placevalue[i], x, yy-15);
+      else
+	  ctx.fillText(placevalue[i], x, yy);
+    }
+    ctx.font = font;
     ctx.lineWidth = 1;
 
     // draws all nodes
