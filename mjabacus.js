@@ -495,5 +495,8 @@ function toWords(s) {
         for (var i = x + 1; i < s.length; i++ )
 	    str += dg[n[i]] + ' ';
     }
+  if (str.startsWith('point')) {
+	  str = "zero " + str;
+  }
   return str.trim();
 }
