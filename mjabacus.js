@@ -5,8 +5,8 @@
 // There is no warranty or other guarantee of fitness for this software, 
 // it is provided solely "as is". 
 
-var number = 0;
-
+var number = math.number(0);
+var adjustment=5; // 5 rows before Ones row
 
 function UIElement(x, y, width, height, type, ref, subref, slotType) {
   this.x = x;
@@ -27,7 +27,7 @@ function Bead() {
 function AbacusCtrl(type) {
   this.type = type; // 0 Japanese, 1 Chinese
 
-  this.beadLines = 16;
+  this.beadLines = 14;
   this.beadPerLine = (this.type == 0) ? 5 : 7;
   this.beadSep = (this.type == 0) ? 3 : 4;
   this.beadHeight = 40;
@@ -75,9 +75,9 @@ function AbacusCtrl(type) {
     var state = !this.nodes[nodeId].active;
 
     if (!state)
-        number -= (10**(line)) * ((this.nodes[nodeId].value === 5) ? 5 : 1)
+        number -= (math.number(10)**math.number(line-adjustment)) * math.number(((this.nodes[nodeId].value === 5) ? 5 : 1))
     else
-	number += (10**(line)) * ((this.nodes[nodeId].value === 5) ? 5 : 1)
+	number += (math.number(10)**math.number(line-adjustment)) * math.number(((this.nodes[nodeId].value === 5) ? 5 : 1))
 
      console.log(this.nodes[nodeId])
 
@@ -100,9 +100,9 @@ function AbacusCtrl(type) {
               this.nodes[n].position[1] += offset;
               this.nodes[n].active = !this.nodes[n].active;
                  if (!state)
-		   number -= 10**line
+		   number -= math.number(10)**math.number(line-adjustment)
 		 else
-	           number += 10**line
+	           number += math.number(10)**math.number(line-adjustment)
  
 
             }
@@ -123,8 +123,8 @@ function AbacusCtrl(type) {
         }
       }
     }
-  $("#number").text(`${number}`)
-  var text = toWords(number);
+  $("#number").text(`${parseFloat(number.toFixed(5))}`)
+  var text = toWords(parseFloat(number.toFixed(5)));
   $("#number-text").text(text);
   };
 }
@@ -147,7 +147,7 @@ function Abacus(parentDivId, type) {
     canvas = document.createElement('canvas');
     if (!canvas) console.log("Abacus error: can not create a canvas element");
     canvas.id = parentDivId + "_Abacus";
-    canvas.width = 40 + (abacusCtrl.beadLines+1) * abacusCtrl.beadSpacing;
+    canvas.width = 200 + 40 + (abacusCtrl.beadLines+1) * abacusCtrl.beadSpacing;
     canvas.height = 60 + (abacusCtrl.beadPerLine + 2) * abacusCtrl.beadHeight;
     document.body.appendChild(canvas);
     var parent = document.getElementById(divId);
@@ -257,12 +257,12 @@ function Abacus(parentDivId, type) {
         ly += stepsY;
       }
     }
-    var placevalue = ["Ones", "Tens", "Hundreds", "Thousands", "Ten Thousands", "Hundred Thousands", "Millions", "Ten Millions", "Hundred Millions", "Billions", "Ten Billions", "Hundred Billions", "Trillions", "Ten Trillions", "Hundred Trillions", "Quadrillions"]
+    var placevalue = ["Hundred ThousandTHS", "Ten ThousandTHS", "ThousandTHS", "HundredTHS", "TenTHS", "Ones", "Tens", "Hundreds", "Thousands", "Ten Thousands", "Hundred Thousands", "Millions", "Ten Millions", "Hundred Millions", "Billions", "Ten Billions"]
     // draw frame
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 5;
     for (var i = 0; i < abacusCtrl.beadLines; i++) {
-      var x = -30 + (abacusCtrl.beadLines+1) * abacusCtrl.beadSpacing - i * abacusCtrl.beadSpacing;
+      var x = -30 + (abacusCtrl.beadLines+3) * abacusCtrl.beadSpacing - i * abacusCtrl.beadSpacing;
       var y = 20 + (abacusCtrl.beadPerLine + 2) * abacusCtrl.beadHeight
       ctx.beginPath();
       ctx.moveTo(x, 20);
@@ -274,7 +274,7 @@ function Abacus(parentDivId, type) {
       if (j === 1) y = 20 + (abacusCtrl.beadPerLine - abacusCtrl.beadSep) * abacusCtrl.beadHeight;
       if (j === 2) y = 20 + (abacusCtrl.beadPerLine + 2) * abacusCtrl.beadHeight;
       ctx.beginPath();
-      ctx.moveTo(20 + abacusCtrl.beadSpacing, y);
+      ctx.moveTo(20 + abacusCtrl.beadSpacing*3, y);
       ctx.lineTo(1360, y);
       ctx.stroke();
     }
@@ -282,7 +282,7 @@ function Abacus(parentDivId, type) {
     var font = ctx.font;
     ctx.font = '12px Sserif';
     for (var i = 0; i < abacusCtrl.beadLines; i++) {
-      var x = -60 + (abacusCtrl.beadLines+1) * abacusCtrl.beadSpacing - i * abacusCtrl.beadSpacing;
+      var x = -60 + (abacusCtrl.beadLines+3) * abacusCtrl.beadSpacing - i * abacusCtrl.beadSpacing;
       ctx.beginPath();
       if (i % 2 == 1)
           ctx.fillText(placevalue[i], x, yy-15);
@@ -491,7 +491,9 @@ function toWords(s) {
         var y = s.length;
         str +=
             'point ';
-        for (var i = x + 1; str.replace(/\s+/g, ' '); ) ;
+	str = str.replace(/\s+/g, ' ');
+        for (var i = x + 1; i < s.length; i++ )
+	    str += dg[n[i]] + ' ';
     }
   return str.trim();
 }
