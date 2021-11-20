@@ -491,7 +491,7 @@ function toWords(s) {
         var y = s.length;
         str +=
             'point ';
-        for (var i = x + 1; istr.replace(/\s+/g, ' '); ) ;
+        for (var i = x + 1; str.replace(/\s+/g, ' '); ) ;
     }
   return str.trim();
 }
